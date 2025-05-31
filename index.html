@@ -457,7 +457,7 @@
 
             connectSocket() {
                 // Replace with your actual backend URL
-                this.socket = io('https://your-backend-url.com');
+                this.socket = io('https://backend-zfgs.onrender.com');
 
                 this.socket.on('connect', () => {
                     this.updateStatus(`Connected to room: ${this.currentRoom}`, true);
