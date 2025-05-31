@@ -13,10 +13,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
             color: #ffffff;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
@@ -28,64 +29,80 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
+            padding: 20px 0;
         }
 
         .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
             margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .tagline {
             color: #a0a0a0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: 300;
         }
 
         .room-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
             margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .room-controls {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
-            align-items: center;
+            align-items: end;
             justify-content: center;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
+            min-width: 200px;
         }
 
         label {
             font-size: 0.9rem;
-            color: #a0a0a0;
+            color: #b0b0b0;
+            font-weight: 500;
         }
 
         input {
-            padding: 12px 15px;
+            padding: 14px 18px;
             border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             color: #ffffff;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 400;
         }
 
         input:focus {
             outline: none;
             border-color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(76, 205, 196, 0.1);
         }
 
         input::placeholder {
@@ -93,20 +110,38 @@
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
             color: white;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
 
         .btn:disabled {
@@ -115,28 +150,55 @@
             transform: none;
         }
 
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 350px;
+            grid-template-columns: 1fr 400px;
             gap: 30px;
         }
 
         .video-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .host-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             margin-bottom: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            background: #000;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
         #videoPlayer {
@@ -145,42 +207,78 @@
             left: 0;
             width: 100%;
             height: 100%;
+            border-radius: 15px;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            display: block;
         }
 
         .video-controls {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             flex-wrap: wrap;
             align-items: center;
         }
 
         .video-url-input {
             flex: 1;
-            min-width: 250px;
+            min-width: 300px;
         }
 
         .chat-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 700px;
         }
 
         .chat-header {
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .user-count {
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ecdc4;
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 205, 196, 0.3);
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding-right: 10px;
+            scroll-behavior: smooth;
         }
 
         .chat-messages::-webkit-scrollbar {
@@ -188,66 +286,145 @@
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 3px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .message {
             margin-bottom: 15px;
-            padding: 10px 15px;
+            padding: 15px 18px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 15px;
             border-left: 3px solid #4ecdc4;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .message.system {
             background: rgba(255, 107, 107, 0.1);
             border-left-color: #ff6b6b;
             font-style: italic;
+            text-align: center;
+        }
+
+        .message.host {
+            border-left-color: #ffa500;
+            background: rgba(255, 165, 0, 0.1);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+            flex-shrink: 0;
         }
 
         .message-user {
             font-weight: 600;
             color: #4ecdc4;
-            margin-bottom: 5px;
+        }
+
+        .message-user.host {
+            color: #ffa500;
         }
 
         .message-text {
-            line-height: 1.4;
+            line-height: 1.5;
+            word-wrap: break-word;
         }
 
         .message-time {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #888;
             margin-top: 5px;
         }
 
+        .typing-indicator {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            font-style: italic;
+            color: #999;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
         .chat-input-container {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            align-items: end;
         }
 
         .chat-input {
             flex: 1;
+            resize: none;
+            min-height: 44px;
+            max-height: 100px;
+            padding: 12px 16px;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            min-width: auto;
         }
 
         .status {
             text-align: center;
             padding: 15px;
             margin: 20px 0;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 600;
+            animation: statusPulse 2s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         .status.connected {
             background: rgba(76, 205, 196, 0.2);
             color: #4ecdc4;
             border: 1px solid rgba(76, 205, 196, 0.3);
+            animation: none;
         }
 
         .status.disconnected {
@@ -256,13 +433,50 @@
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
 
-        .user-count {
-            background: rgba(76, 205, 196, 0.2);
-            color: #4ecdc4;
-            padding: 5px 12px;
-            border-radius: 20px;
+        .disabled-overlay {
+            position: relative;
+        }
+
+        .disabled-overlay::after {
+            content: 'Only host can control video';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .disabled-overlay:hover::after {
+            opacity: 1;
+        }
+
+        .room-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .room-id {
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 6px;
             font-weight: 600;
+            letter-spacing: 1px;
         }
 
         @media (max-width: 768px) {
@@ -278,6 +492,7 @@
 
             .input-group {
                 width: 100%;
+                min-width: auto;
             }
 
             .video-controls {
@@ -289,34 +504,32 @@
             }
 
             .chat-section {
-                height: 400px;
+                height: 500px;
             }
 
             .logo {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .container {
                 padding: 15px;
             }
-        }
-
-        @media (max-width: 480px) {
-            .room-controls {
-                padding: 0;
-            }
-
-            .btn {
-                width: 100%;
-            }
 
             .chat-input-container {
                 flex-direction: column;
+            }
+
+            .send-btn {
+                width: 100%;
             }
         }
 
         .hidden {
             display: none;
+        }
+
+        .create-room-btn {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
         }
     </style>
 </head>
@@ -324,7 +537,7 @@
     <div class="container">
         <header class="header">
             <div class="logo">Aiyomi</div>
-            <div class="tagline">Watch together, wherever you are</div>
+            <div class="tagline">Watch together, anywhere in the world</div>
         </header>
 
         <div class="room-section">
@@ -335,25 +548,36 @@
                 </div>
                 <div class="input-group">
                     <label for="roomInput">Room ID</label>
-                    <input type="text" id="roomInput" placeholder="Enter room ID or create new" maxlength="20">
+                    <input type="text" id="roomInput" placeholder="Enter room ID" maxlength="20">
                 </div>
                 <button class="btn" id="joinBtn">Join Room</button>
-                <button class="btn" id="leaveBtn" style="display: none;">Leave Room</button>
+                <button class="btn create-room-btn" id="createBtn">Create Room</button>
+                <button class="btn secondary" id="leaveBtn" style="display: none;">Leave Room</button>
             </div>
         </div>
 
         <div id="statusDiv" class="status disconnected">
-            Not connected
+            Enter your name and room ID to get started
         </div>
 
         <div id="mainContent" class="main-content hidden">
             <div class="video-section">
+                <div class="video-header">
+                    <h2>Watch Party</h2>
+                    <div id="hostBadge" class="host-badge" style="display: none;">HOST</div>
+                </div>
+                
                 <div class="video-container">
-                    <video id="videoPlayer" controls>
+                    <video id="videoPlayer" controls style="display: none;">
                         Your browser does not support the video tag.
                     </video>
+                    <div id="videoPlaceholder" class="video-placeholder">
+                        <div style="font-size: 4rem; margin-bottom: 15px;">🎬</div>
+                        <div>Host will load a video to start watching</div>
+                    </div>
                 </div>
-                <div class="video-controls">
+                
+                <div id="videoControls" class="video-controls">
                     <input type="url" id="videoUrlInput" class="video-url-input" placeholder="Enter video URL (MP4, WebM, etc.)">
                     <button class="btn" id="loadVideoBtn">Load Video</button>
                 </div>
@@ -361,13 +585,20 @@
 
             <div class="chat-section">
                 <div class="chat-header">
-                    <h3>Chat</h3>
+                    <div class="chat-title">Chat</div>
                     <div id="userCount" class="user-count">0 users online</div>
                 </div>
+                
+                <div class="room-info">
+                    <div>Room: <span id="currentRoomId" class="room-id"></span></div>
+                </div>
+                
                 <div id="chatMessages" class="chat-messages"></div>
+                <div id="typingIndicator" class="typing-indicator hidden"></div>
+                
                 <div class="chat-input-container">
-                    <input type="text" id="chatInput" class="chat-input" placeholder="Type a message..." maxlength="500">
-                    <button class="btn" id="sendBtn">Send</button>
+                    <textarea id="chatInput" class="chat-input" placeholder="Type a message..." maxlength="500" rows="1"></textarea>
+                    <button class="btn send-btn" id="sendBtn">Send</button>
                 </div>
             </div>
         </div>
@@ -379,8 +610,11 @@
                 this.socket = null;
                 this.currentRoom = null;
                 this.username = null;
+                this.isHost = false;
                 this.isVideoSyncing = false;
                 this.userCount = 0;
+                this.typingTimer = null;
+                this.isTyping = false;
                 
                 this.initializeElements();
                 this.bindEvents();
@@ -391,27 +625,42 @@
                     usernameInput: document.getElementById('usernameInput'),
                     roomInput: document.getElementById('roomInput'),
                     joinBtn: document.getElementById('joinBtn'),
+                    createBtn: document.getElementById('createBtn'),
                     leaveBtn: document.getElementById('leaveBtn'),
                     statusDiv: document.getElementById('statusDiv'),
                     mainContent: document.getElementById('mainContent'),
                     videoPlayer: document.getElementById('videoPlayer'),
+                    videoPlaceholder: document.getElementById('videoPlaceholder'),
+                    videoControls: document.getElementById('videoControls'),
                     videoUrlInput: document.getElementById('videoUrlInput'),
                     loadVideoBtn: document.getElementById('loadVideoBtn'),
+                    hostBadge: document.getElementById('hostBadge'),
                     chatMessages: document.getElementById('chatMessages'),
                     chatInput: document.getElementById('chatInput'),
                     sendBtn: document.getElementById('sendBtn'),
-                    userCount: document.getElementById('userCount')
+                    userCount: document.getElementById('userCount'),
+                    currentRoomId: document.getElementById('currentRoomId'),
+                    typingIndicator: document.getElementById('typingIndicator')
                 };
             }
 
             bindEvents() {
                 this.elements.joinBtn.addEventListener('click', () => this.joinRoom());
+                this.elements.createBtn.addEventListener('click', () => this.createRoom());
                 this.elements.leaveBtn.addEventListener('click', () => this.leaveRoom());
                 this.elements.loadVideoBtn.addEventListener('click', () => this.loadVideo());
                 this.elements.sendBtn.addEventListener('click', () => this.sendMessage());
                 
                 this.elements.chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.sendMessage();
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                this.elements.chatInput.addEventListener('input', () => {
+                    this.handleTyping();
+                    this.autoResizeTextarea();
                 });
 
                 this.elements.roomInput.addEventListener('keypress', (e) => {
@@ -429,9 +678,63 @@
                 this.elements.videoPlayer.addEventListener('loadedmetadata', () => this.onVideoLoaded());
             }
 
+            generateRoomId() {
+                return Math.random().toString(36).substring(2, 8).toUpperCase();
+            }
+
+            generateAvatar(username) {
+                const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa500', '#ff9ff3', '#54a0ff', '#5f27cd'];
+                const initial = username.charAt(0).toUpperCase();
+                const colorIndex = username.charCodeAt(0) % colors.length;
+                return {
+                    initial,
+                    color: colors[colorIndex]
+                };
+            }
+
+            autoResizeTextarea() {
+                const textarea = this.elements.chatInput;
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
+            }
+
+            handleTyping() {
+                if (!this.socket || !this.socket.connected) return;
+
+                if (!this.isTyping) {
+                    this.isTyping = true;
+                    this.socket.emit('typing-start', {
+                        roomId: this.currentRoom,
+                        username: this.username
+                    });
+                }
+
+                clearTimeout(this.typingTimer);
+                this.typingTimer = setTimeout(() => {
+                    this.isTyping = false;
+                    this.socket.emit('typing-stop', {
+                        roomId: this.currentRoom,
+                        username: this.username
+                    });
+                }, 1000);
+            }
+
             updateStatus(message, isConnected = false) {
                 this.elements.statusDiv.textContent = message;
                 this.elements.statusDiv.className = `status ${isConnected ? 'connected' : 'disconnected'}`;
+            }
+
+            createRoom() {
+                const username = this.elements.usernameInput.value.trim();
+                if (!username) {
+                    alert('Please enter your name');
+                    return;
+                }
+
+                const roomId = this.generateRoomId();
+                this.elements.roomInput.value = roomId;
+                this.isHost = true;
+                this.joinRoom();
             }
 
             joinRoom() {
@@ -456,20 +759,28 @@
             }
 
             connectSocket() {
-                // Replace with your actual backend URL
                 this.socket = io('https://backend-zfgs.onrender.com');
 
                 this.socket.on('connect', () => {
                     this.updateStatus(`Connected to room: ${this.currentRoom}`, true);
                     this.socket.emit('join-room', {
                         roomId: this.currentRoom,
-                        username: this.username
+                        username: this.username,
+                        isHost: this.isHost
                     });
                     this.showMainContent();
                 });
 
                 this.socket.on('disconnect', () => {
                     this.updateStatus('Disconnected from server', false);
+                });
+
+                this.socket.on('room-joined', (data) => {
+                    this.isHost = data.isHost;
+                    this.updateHostControls();
+                    if (data.currentVideo) {
+                        this.syncVideoLoad(data.currentVideo);
+                    }
                 });
 
                 this.socket.on('user-joined', (data) => {
@@ -482,6 +793,12 @@
                     this.addSystemMessage(`${data.username} left the room`);
                     this.userCount = data.userCount;
                     this.updateUserCount();
+                });
+
+                this.socket.on('host-changed', (data) => {
+                    this.isHost = data.newHost === this.username;
+                    this.updateHostControls();
+                    this.addSystemMessage(`${data.newHost} is now the host`);
                 });
 
                 this.socket.on('room-users', (data) => {
@@ -508,22 +825,46 @@
 
                 // Chat events
                 this.socket.on('chat-message', (data) => {
-                    this.addChatMessage(data.username, data.message, data.timestamp);
+                    this.addChatMessage(data.username, data.message, data.timestamp, data.isHost);
+                });
+
+                // Typing events
+                this.socket.on('user-typing', (data) => {
+                    this.showTypingIndicator(data.username);
+                });
+
+                this.socket.on('user-stopped-typing', (data) => {
+                    this.hideTypingIndicator(data.username);
                 });
 
                 this.socket.on('connect_error', (error) => {
-                    this.updateStatus('Connection failed - using demo mode', false);
-                    this.showMainContent();
-                    this.addSystemMessage('Demo mode: Video sync and chat are disabled');
+                    this.updateStatus('Connection failed - check your internet', false);
                 });
             }
 
             showMainContent() {
                 this.elements.mainContent.classList.remove('hidden');
                 this.elements.joinBtn.style.display = 'none';
+                this.elements.createBtn.style.display = 'none';
                 this.elements.leaveBtn.style.display = 'inline-block';
                 this.elements.usernameInput.disabled = true;
                 this.elements.roomInput.disabled = true;
+                this.elements.currentRoomId.textContent = this.currentRoom;
+                this.updateHostControls();
+            }
+
+            updateHostControls() {
+                if (this.isHost) {
+                    this.elements.hostBadge.style.display = 'block';
+                    this.elements.videoControls.classList.remove('disabled-overlay');
+                    this.elements.videoUrlInput.disabled = false;
+                    this.elements.loadVideoBtn.disabled = false;
+                } else {
+                    this.elements.hostBadge.style.display = 'none';
+                    this.elements.videoControls.classList.add('disabled-overlay');
+                    this.elements.videoUrlInput.disabled = true;
+                    this.elements.loadVideoBtn.disabled = true;
+                }
             }
 
             leaveRoom() {
@@ -534,16 +875,25 @@
                 
                 this.elements.mainContent.classList.add('hidden');
                 this.elements.joinBtn.style.display = 'inline-block';
+                this.elements.createBtn.style.display = 'inline-block';
                 this.elements.leaveBtn.style.display = 'none';
                 this.elements.usernameInput.disabled = false;
                 this.elements.roomInput.disabled = false;
-                this.updateStatus('Not connected', false);
+                this.updateStatus('Enter your name and room ID to get started', false);
                 this.clearChat();
                 this.currentRoom = null;
                 this.username = null;
+                this.isHost = false;
+                
+                // Reset video
+                this.elements.videoPlayer.style.display = 'none';
+                this.elements.videoPlaceholder.style.display = 'block';
+                this.elements.videoPlayer.src = '';
             }
 
             loadVideo() {
+                if (!this.isHost) return;
+                
                 const url = this.elements.videoUrlInput.value.trim();
                 if (!url) {
                     alert('Please enter a video URL');
@@ -551,6 +901,8 @@
                 }
 
                 this.elements.videoPlayer.src = url;
+                this.elements.videoPlayer.style.display = 'block';
+                this.elements.videoPlaceholder.style.display = 'none';
                 
                 if (this.socket && this.socket.connected) {
                     this.socket.emit('video-load', {
@@ -561,9 +913,9 @@
                 }
             }
 
-            // Video sync methods
+            // Video sync methods (only host can trigger these)
             onVideoPlay() {
-                if (this.isVideoSyncing) return;
+                if (this.isVideoSyncing || !this.isHost) return;
                 
                 if (this.socket && this.socket.connected) {
                     this.socket.emit('video-play', {
@@ -571,137 +923,187 @@
                         currentTime: this.elements.videoPlayer.currentTime,
                         timestamp: Date.now()
                     });
+
                 }
-            }
+           }
 
-            onVideoPause() {
-                if (this.isVideoSyncing) return;
-                
-                if (this.socket && this.socket.connected) {
-                    this.socket.emit('video-pause', {
-                        roomId: this.currentRoom,
-                        currentTime: this.elements.videoPlayer.currentTime,
-                        timestamp: Date.now()
-                    });
-                }
-            }
+           onVideoPause() {
+               if (this.isVideoSyncing || !this.isHost) return;
+               
+               if (this.socket && this.socket.connected) {
+                   this.socket.emit('video-pause', {
+                       roomId: this.currentRoom,
+                       currentTime: this.elements.videoPlayer.currentTime,
+                       timestamp: Date.now()
+                   });
+               }
+           }
 
-            onVideoSeeked() {
-                if (this.isVideoSyncing) return;
-                
-                if (this.socket && this.socket.connected) {
-                    this.socket.emit('video-seek', {
-                        roomId: this.currentRoom,
-                        currentTime: this.elements.videoPlayer.currentTime,
-                        timestamp: Date.now()
-                    });
-                }
-            }
+           onVideoSeeked() {
+               if (this.isVideoSyncing || !this.isHost) return;
+               
+               if (this.socket && this.socket.connected) {
+                   this.socket.emit('video-seek', {
+                       roomId: this.currentRoom,
+                       currentTime: this.elements.videoPlayer.currentTime,
+                       timestamp: Date.now()
+                   });
+               }
+           }
 
-            onVideoLoaded() {
-                // Video loaded, ready for sync
-            }
+           onVideoLoaded() {
+               // Video loaded, ready for sync
+           }
 
-            syncVideoPlay(data) {
-                this.isVideoSyncing = true;
-                this.elements.videoPlayer.currentTime = data.currentTime;
-                this.elements.videoPlayer.play().catch(e => console.log('Auto-play prevented'));
-                setTimeout(() => { this.isVideoSyncing = false; }, 500);
-            }
+           syncVideoPlay(data) {
+               this.isVideoSyncing = true;
+               this.elements.videoPlayer.currentTime = data.currentTime;
+               this.elements.videoPlayer.play().catch(e => console.log('Auto-play prevented'));
+               setTimeout(() => { this.isVideoSyncing = false; }, 500);
+           }
 
-            syncVideoPause(data) {
-                this.isVideoSyncing = true;
-                this.elements.videoPlayer.currentTime = data.currentTime;
-                this.elements.videoPlayer.pause();
-                setTimeout(() => { this.isVideoSyncing = false; }, 500);
-            }
+           syncVideoPause(data) {
+               this.isVideoSyncing = true;
+               this.elements.videoPlayer.currentTime = data.currentTime;
+               this.elements.videoPlayer.pause();
+               setTimeout(() => { this.isVideoSyncing = false; }, 500);
+           }
 
-            syncVideoSeek(data) {
-                this.isVideoSyncing = true;
-                this.elements.videoPlayer.currentTime = data.currentTime;
-                setTimeout(() => { this.isVideoSyncing = false; }, 500);
-            }
+           syncVideoSeek(data) {
+               this.isVideoSyncing = true;
+               this.elements.videoPlayer.currentTime = data.currentTime;
+               setTimeout(() => { this.isVideoSyncing = false; }, 500);
+           }
 
-            syncVideoLoad(data) {
-                this.elements.videoPlayer.src = data.url;
-                this.elements.videoUrlInput.value = data.url;
-                this.addSystemMessage(`Video loaded: ${data.url.substring(0, 50)}...`);
-            }
+           syncVideoLoad(data) {
+               this.elements.videoPlayer.src = data.url;
+               this.elements.videoUrlInput.value = data.url;
+               this.elements.videoPlayer.style.display = 'block';
+               this.elements.videoPlaceholder.style.display = 'none';
+               this.addSystemMessage(`Video loaded: ${this.getVideoTitle(data.url)}`);
+           }
 
-            // Chat methods
-            sendMessage() {
-                const message = this.elements.chatInput.value.trim();
-                if (!message) return;
+           getVideoTitle(url) {
+               try {
+                   const urlObj = new URL(url);
+                   const filename = urlObj.pathname.split('/').pop();
+                   return filename || 'Video';
+               } catch {
+                   return url.substring(0, 30) + '...';
+               }
+           }
 
-                if (this.socket && this.socket.connected) {
-                    this.socket.emit('chat-message', {
-                        roomId: this.currentRoom,
-                        username: this.username,
-                        message: message,
-                        timestamp: Date.now()
-                    });
-                } else {
-                    // Demo mode
-                    this.addChatMessage(this.username, message, Date.now());
-                }
+           // Chat methods
+           sendMessage() {
+               const message = this.elements.chatInput.value.trim();
+               if (!message) return;
 
-                this.elements.chatInput.value = '';
-            }
+               if (this.socket && this.socket.connected) {
+                   this.socket.emit('chat-message', {
+                       roomId: this.currentRoom,
+                       username: this.username,
+                       message: message,
+                       timestamp: Date.now(),
+                       isHost: this.isHost
+                   });
+               } else {
+                   // Demo mode
+                   this.addChatMessage(this.username, message, Date.now(), this.isHost);
+               }
 
-            addChatMessage(username, message, timestamp) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                
-                const time = new Date(timestamp).toLocaleTimeString();
-                
-                messageDiv.innerHTML = `
-                    <div class="message-user">${this.escapeHtml(username)}</div>
-                    <div class="message-text">${this.escapeHtml(message)}</div>
-                    <div class="message-time">${time}</div>
-                `;
-                
-                this.elements.chatMessages.appendChild(messageDiv);
-                this.scrollChatToBottom();
-            }
+               this.elements.chatInput.value = '';
+               this.autoResizeTextarea();
+               
+               // Stop typing indicator
+               if (this.isTyping) {
+                   this.isTyping = false;
+                   clearTimeout(this.typingTimer);
+                   if (this.socket && this.socket.connected) {
+                       this.socket.emit('typing-stop', {
+                           roomId: this.currentRoom,
+                           username: this.username
+                       });
+                   }
+               }
+           }
 
-            addSystemMessage(message) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message system';
-                
-                const time = new Date().toLocaleTimeString();
-                
-                messageDiv.innerHTML = `
-                    <div class="message-text">${this.escapeHtml(message)}</div>
-                    <div class="message-time">${time}</div>
-                `;
-                
-                this.elements.chatMessages.appendChild(messageDiv);
-                this.scrollChatToBottom();
-            }
+           addChatMessage(username, message, timestamp, isHost = false) {
+               const messageDiv = document.createElement('div');
+               messageDiv.className = `message ${isHost ? 'host' : ''}`;
+               
+               const avatar = this.generateAvatar(username);
+               const time = new Date(timestamp).toLocaleTimeString();
+               
+               messageDiv.innerHTML = `
+                   <div class="message-header">
+                       <div class="avatar" style="background-color: ${avatar.color}">
+                           ${avatar.initial}
+                       </div>
+                       <div class="message-user ${isHost ? 'host' : ''}">${this.escapeHtml(username)}${isHost ? ' 👑' : ''}</div>
+                   </div>
+                   <div class="message-text">${this.escapeHtml(message)}</div>
+                   <div class="message-time">${time}</div>
+               `;
+               
+               this.elements.chatMessages.appendChild(messageDiv);
+               this.scrollChatToBottom();
+           }
 
-            scrollChatToBottom() {
-                this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
-            }
+           addSystemMessage(message) {
+               const messageDiv = document.createElement('div');
+               messageDiv.className = 'message system';
+               
+               const time = new Date().toLocaleTimeString();
+               
+               messageDiv.innerHTML = `
+                   <div class="message-text">${this.escapeHtml(message)}</div>
+                   <div class="message-time">${time}</div>
+               `;
+               
+               this.elements.chatMessages.appendChild(messageDiv);
+               this.scrollChatToBottom();
+           }
 
-            clearChat() {
-                this.elements.chatMessages.innerHTML = '';
-            }
+           showTypingIndicator(username) {
+               if (username === this.username) return;
+               
+               this.elements.typingIndicator.textContent = `${username} is typing...`;
+               this.elements.typingIndicator.classList.remove('hidden');
+               this.scrollChatToBottom();
+           }
 
-            updateUserCount() {
-                this.elements.userCount.textContent = `${this.userCount} user${this.userCount !== 1 ? 's' : ''} online`;
-            }
+           hideTypingIndicator(username) {
+               if (username === this.username) return;
+               
+               this.elements.typingIndicator.classList.add('hidden');
+           }
 
-            escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-        }
+           scrollChatToBottom() {
+               setTimeout(() => {
+                   this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
+               }, 100);
+           }
 
-        // Initialize the app when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new AiyomiApp();
-        });
-    </script>
+           clearChat() {
+               this.elements.chatMessages.innerHTML = '';
+               this.elements.typingIndicator.classList.add('hidden');
+           }
+
+           updateUserCount() {
+               this.elements.userCount.textContent = `${this.userCount} user${this.userCount !== 1 ? 's' : ''} online`;
+           }
+
+           escapeHtml(text) {
+               const div = document.createElement('div');
+               div.textContent = text;
+               return div.innerHTML;
+           }
+       }
+
+       // Initialize the app when the page loads
+       document.addEventListener('DOMContentLoaded', () => {
+           new AiyomiApp();
+       });
+   </script>
 </body>
 </html>
