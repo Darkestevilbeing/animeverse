@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aiyomi - Watch Together</title>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .room-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .room-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        input {
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .video-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #videoPlayer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .video-url-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .chat-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .message.system {
+            background: rgba(255, 107, 107, 0.1);
+            border-left-color: #ff6b6b;
+            font-style: italic;
+        }
+
+        .message-user {
+            font-weight: 600;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+        }
+
+        .message-text {
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        .status {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .status.connected {
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ecdc4;
+            border: 1px solid rgba(76, 205, 196, 0.3);
+        }
+
+        .status.disconnected {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .user-count {
+            background: rgba(76, 205, 196, 0.2);
+            color: #4ecdc4;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .room-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group {
+                width: 100%;
+            }
+
+            .video-controls {
+                flex-direction: column;
+            }
+
+            .video-url-input {
+                min-width: auto;
+            }
+
+            .chat-section {
+                height: 400px;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .room-controls {
+                padding: 0;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Aiyomi</div>
+            <div class="tagline">Watch together, wherever you are</div>
+        </header>
+
+        <div class="room-section">
+            <div class="room-controls">
+                <div class="input-group">
+                    <label for="usernameInput">Your Name</label>
+                    <input type="text" id="usernameInput" placeholder="Enter your name" maxlength="20">
+                </div>
+                <div class="input-group">
+                    <label for="roomInput">Room ID</label>
+                    <input type="text" id="roomInput" placeholder="Enter room ID or create new" maxlength="20">
+                </div>
+                <button class="btn" id="joinBtn">Join Room</button>
+                <button class="btn" id="leaveBtn" style="display: none;">Leave Room</button>
+            </div>
+        </div>
+
+        <div id="statusDiv" class="status disconnected">
+            Not connected
+        </div>
+
+        <div id="mainContent" class="main-content hidden">
+            <div class="video-section">
+                <div class="video-container">
+                    <video id="videoPlayer" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-controls">
+                    <input type="url" id="videoUrlInput" class="video-url-input" placeholder="Enter video URL (MP4, WebM, etc.)">
+                    <button class="btn" id="loadVideoBtn">Load Video</button>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h3>Chat</h3>
+                    <div id="userCount" class="user-count">0 users online</div>
+                </div>
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Type a message..." maxlength="500">
+                    <button class="btn" id="sendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AiyomiApp {
+            constructor() {
+                this.socket = null;
+                this.currentRoom = null;
+                this.username = null;
+                this.isVideoSyncing = false;
+                this.userCount = 0;
+                
+                this.initializeElements();
+                this.bindEvents();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    usernameInput: document.getElementById('usernameInput'),
+                    roomInput: document.getElementById('roomInput'),
+                    joinBtn: document.getElementById('joinBtn'),
+                    leaveBtn: document.getElementById('leaveBtn'),
+                    statusDiv: document.getElementById('statusDiv'),
+                    mainContent: document.getElementById('mainContent'),
+                    videoPlayer: document.getElementById('videoPlayer'),
+                    videoUrlInput: document.getElementById('videoUrlInput'),
+                    loadVideoBtn: document.getElementById('loadVideoBtn'),
+                    chatMessages: document.getElementById('chatMessages'),
+                    chatInput: document.getElementById('chatInput'),
+                    sendBtn: document.getElementById('sendBtn'),
+                    userCount: document.getElementById('userCount')
+                };
+            }
+
+            bindEvents() {
+                this.elements.joinBtn.addEventListener('click', () => this.joinRoom());
+                this.elements.leaveBtn.addEventListener('click', () => this.leaveRoom());
+                this.elements.loadVideoBtn.addEventListener('click', () => this.loadVideo());
+                this.elements.sendBtn.addEventListener('click', () => this.sendMessage());
+                
+                this.elements.chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+
+                this.elements.roomInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.joinRoom();
+                });
+
+                this.elements.usernameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.joinRoom();
+                });
+
+                // Video event listeners
+                this.elements.videoPlayer.addEventListener('play', () => this.onVideoPlay());
+                this.elements.videoPlayer.addEventListener('pause', () => this.onVideoPause());
+                this.elements.videoPlayer.addEventListener('seeked', () => this.onVideoSeeked());
+                this.elements.videoPlayer.addEventListener('loadedmetadata', () => this.onVideoLoaded());
+            }
+
+            updateStatus(message, isConnected = false) {
+                this.elements.statusDiv.textContent = message;
+                this.elements.statusDiv.className = `status ${isConnected ? 'connected' : 'disconnected'}`;
+            }
+
+            joinRoom() {
+                const username = this.elements.usernameInput.value.trim();
+                const roomId = this.elements.roomInput.value.trim();
+
+                if (!username) {
+                    alert('Please enter your name');
+                    return;
+                }
+
+                if (!roomId) {
+                    alert('Please enter a room ID');
+                    return;
+                }
+
+                this.username = username;
+                this.currentRoom = roomId;
+
+                this.updateStatus('Connecting...', false);
+                this.connectSocket();
+            }
+
+            connectSocket() {
+                // Replace with your actual backend URL
+                this.socket = io('https://your-backend-url.com');
+
+                this.socket.on('connect', () => {
+                    this.updateStatus(`Connected to room: ${this.currentRoom}`, true);
+                    this.socket.emit('join-room', {
+                        roomId: this.currentRoom,
+                        username: this.username
+                    });
+                    this.showMainContent();
+                });
+
+                this.socket.on('disconnect', () => {
+                    this.updateStatus('Disconnected from server', false);
+                });
+
+                this.socket.on('user-joined', (data) => {
+                    this.addSystemMessage(`${data.username} joined the room`);
+                    this.userCount = data.userCount;
+                    this.updateUserCount();
+                });
+
+                this.socket.on('user-left', (data) => {
+                    this.addSystemMessage(`${data.username} left the room`);
+                    this.userCount = data.userCount;
+                    this.updateUserCount();
+                });
+
+                this.socket.on('room-users', (data) => {
+                    this.userCount = data.userCount;
+                    this.updateUserCount();
+                });
+
+                // Video sync events
+                this.socket.on('video-play', (data) => {
+                    this.syncVideoPlay(data);
+                });
+
+                this.socket.on('video-pause', (data) => {
+                    this.syncVideoPause(data);
+                });
+
+                this.socket.on('video-seek', (data) => {
+                    this.syncVideoSeek(data);
+                });
+
+                this.socket.on('video-load', (data) => {
+                    this.syncVideoLoad(data);
+                });
+
+                // Chat events
+                this.socket.on('chat-message', (data) => {
+                    this.addChatMessage(data.username, data.message, data.timestamp);
+                });
+
+                this.socket.on('connect_error', (error) => {
+                    this.updateStatus('Connection failed - using demo mode', false);
+                    this.showMainContent();
+                    this.addSystemMessage('Demo mode: Video sync and chat are disabled');
+                });
+            }
+
+            showMainContent() {
+                this.elements.mainContent.classList.remove('hidden');
+                this.elements.joinBtn.style.display = 'none';
+                this.elements.leaveBtn.style.display = 'inline-block';
+                this.elements.usernameInput.disabled = true;
+                this.elements.roomInput.disabled = true;
+            }
+
+            leaveRoom() {
+                if (this.socket) {
+                    this.socket.emit('leave-room', { roomId: this.currentRoom });
+                    this.socket.disconnect();
+                }
+                
+                this.elements.mainContent.classList.add('hidden');
+                this.elements.joinBtn.style.display = 'inline-block';
+                this.elements.leaveBtn.style.display = 'none';
+                this.elements.usernameInput.disabled = false;
+                this.elements.roomInput.disabled = false;
+                this.updateStatus('Not connected', false);
+                this.clearChat();
+                this.currentRoom = null;
+                this.username = null;
+            }
+
+            loadVideo() {
+                const url = this.elements.videoUrlInput.value.trim();
+                if (!url) {
+                    alert('Please enter a video URL');
+                    return;
+                }
+
+                this.elements.videoPlayer.src = url;
+                
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('video-load', {
+                        roomId: this.currentRoom,
+                        url: url,
+                        timestamp: Date.now()
+                    });
+                }
+            }
+
+            // Video sync methods
+            onVideoPlay() {
+                if (this.isVideoSyncing) return;
+                
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('video-play', {
+                        roomId: this.currentRoom,
+                        currentTime: this.elements.videoPlayer.currentTime,
+                        timestamp: Date.now()
+                    });
+                }
+            }
+
+            onVideoPause() {
+                if (this.isVideoSyncing) return;
+                
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('video-pause', {
+                        roomId: this.currentRoom,
+                        currentTime: this.elements.videoPlayer.currentTime,
+                        timestamp: Date.now()
+                    });
+                }
+            }
+
+            onVideoSeeked() {
+                if (this.isVideoSyncing) return;
+                
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('video-seek', {
+                        roomId: this.currentRoom,
+                        currentTime: this.elements.videoPlayer.currentTime,
+                        timestamp: Date.now()
+                    });
+                }
+            }
+
+            onVideoLoaded() {
+                // Video loaded, ready for sync
+            }
+
+            syncVideoPlay(data) {
+                this.isVideoSyncing = true;
+                this.elements.videoPlayer.currentTime = data.currentTime;
+                this.elements.videoPlayer.play().catch(e => console.log('Auto-play prevented'));
+                setTimeout(() => { this.isVideoSyncing = false; }, 500);
+            }
+
+            syncVideoPause(data) {
+                this.isVideoSyncing = true;
+                this.elements.videoPlayer.currentTime = data.currentTime;
+                this.elements.videoPlayer.pause();
+                setTimeout(() => { this.isVideoSyncing = false; }, 500);
+            }
+
+            syncVideoSeek(data) {
+                this.isVideoSyncing = true;
+                this.elements.videoPlayer.currentTime = data.currentTime;
+                setTimeout(() => { this.isVideoSyncing = false; }, 500);
+            }
+
+            syncVideoLoad(data) {
+                this.elements.videoPlayer.src = data.url;
+                this.elements.videoUrlInput.value = data.url;
+                this.addSystemMessage(`Video loaded: ${data.url.substring(0, 50)}...`);
+            }
+
+            // Chat methods
+            sendMessage() {
+                const message = this.elements.chatInput.value.trim();
+                if (!message) return;
+
+                if (this.socket && this.socket.connected) {
+                    this.socket.emit('chat-message', {
+                        roomId: this.currentRoom,
+                        username: this.username,
+                        message: message,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    // Demo mode
+                    this.addChatMessage(this.username, message, Date.now());
+                }
+
+                this.elements.chatInput.value = '';
+            }
+
+            addChatMessage(username, message, timestamp) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message';
+                
+                const time = new Date(timestamp).toLocaleTimeString();
+                
+                messageDiv.innerHTML = `
+                    <div class="message-user">${this.escapeHtml(username)}</div>
+                    <div class="message-text">${this.escapeHtml(message)}</div>
+                    <div class="message-time">${time}</div>
+                `;
+                
+                this.elements.chatMessages.appendChild(messageDiv);
+                this.scrollChatToBottom();
+            }
+
+            addSystemMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message system';
+                
+                const time = new Date().toLocaleTimeString();
+                
+                messageDiv.innerHTML = `
+                    <div class="message-text">${this.escapeHtml(message)}</div>
+                    <div class="message-time">${time}</div>
+                `;
+                
+                this.elements.chatMessages.appendChild(messageDiv);
+                this.scrollChatToBottom();
+            }
+
+            scrollChatToBottom() {
+                this.elements.chatMessages.scrollTop = this.elements.chatMessages.scrollHeight;
+            }
+
+            clearChat() {
+                this.elements.chatMessages.innerHTML = '';
+            }
+
+            updateUserCount() {
+                this.elements.userCount.textContent = `${this.userCount} user${this.userCount !== 1 ? 's' : ''} online`;
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new AiyomiApp();
+        });
+    </script>
+</body>
+</html>
